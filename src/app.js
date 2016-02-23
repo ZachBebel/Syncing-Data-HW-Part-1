@@ -7,8 +7,13 @@ var io = require('socket.io')(app);
 //grab our file system 
 var fs = require('fs');
 
-//tell server to listen on the port
-app.listen(3000);
+//get the PORT for the server
+//Remember we use process.env.PORT or process.env.NODE_PORT to check if we are running on a server
+//that already has set ports in the environment configuration
+var PORT = process.env.PORT || process.env.NODE_PORT || 3000;
+
+//tell your server to listen on the port
+app.listen(PORT);
 
 //Overall object to show maintained by the server
 /**Clients will have their own local objects, but the one on the server will be 
