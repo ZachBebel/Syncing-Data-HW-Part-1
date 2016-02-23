@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+</head>
+
+<body>
+    <h2>Total Score: <span id="totalScore"></span></h2>
+    <h2>My Generated Score: <span id="myScore"></span></h2>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        "use strict";
+
+        var socket; //our websocket connection
+        var totalScore; //total score of everyone as synced from the server
+        var myScore = 0; //our personal generated score (score generated from this tab)
+        var myScoreElem; //our personal score element on the page
+
+        //an automated function to generate messages to send to the server
+        //Normally something like this would be invoked by user input
+        //such as clicking with the mouse, clicking a button, using WASD, etc
+        function generateScore() {
+            //add 10 to our personal score (hard coded number for example)
+            myScore += 10;
+            //update our personal score on the screen
+            myScoreElem.innerHTML = myScore;
+            //request to update the total world score on the server by 10 (again hard coded for example)
+            //We know the request type is 'updateScore' based on what we coded in the server
+            socket.emit("updateScore", 10);
+
+            console.log(myScore);
+        }
+
+        //function to display updated score from server when a packet arrives
+        function update(data) {
+            totalScore.innerHTML = data;
+        }
+
+        function init() {
+            totalScore = document.getElementById("totalScore"); //total score element
+            myScoreElem = document.getElementById("myScore"); //personal score element
+            totalScore.innerHTML = "0"; //default text for page
+            myScoreElem.innerHTML = "0";
+
+            //Connect to our server (io added automatically by socket.io when embedding it in the HTTP app on the server side)
+            //This will return a new websocket connection. Every call to io.connect will return a new websocket connection 
+            //BUT not necessarily close the existing one. 
+            //You can absolutely use multiple websockets on the client, but you have to manage which ones are listening to which
+            //messages. In cases like this, you only need one. 
+            socket = io.connect();
+
+            //when the socket connects successfully
+            socket.on('connect', function () {
+                //start our automated messages to the server every second. 
+                //This is just to show communication. Again, normally this would be invoked by a user action, not automated
+                setInterval(generateScore, 1200);
+            });
+
+            //When our socket receives 'updated' messages from the server, call our update function
+            socket.on('updated', update);
+        }
+
+        window.onload = init;
+    </script>
+</body>
+
+</html>

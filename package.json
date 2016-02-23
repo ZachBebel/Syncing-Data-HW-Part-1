@@ -1,0 +1,19 @@
+{
+    "name": "Syncing Data HW Part 1",
+    "version": "1.0.0",
+    "description": "A simple application for updating a count",
+    "main": "./src/app.js",
+    "scripts": {
+        "start": "node ./src/app.js",
+        "pretest": "jshint ./src",
+        "test": "echo \"Tests complete\""
+    },
+    "author": "Zach Bebel",
+    "license": "ISC",
+    "dependencies": {
+        "socket.io": "^1.4.5"
+    },
+    "devDependencies": {
+        "jshint": "^2.9.1"
+    }
+}
