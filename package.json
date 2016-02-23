@@ -1,5 +1,5 @@
 {
-    "name": "Syncing Data HW Part 1",
+    "name": "Syncing-Data-HW-Part-1",
     "version": "1.0.0",
     "description": "A simple application for updating a count",
     "main": "./src/app.js",
